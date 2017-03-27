@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  */
 
-#include "../../third_party/dpdk/lib/librte_eal/common/include/rte_version.h"
+#include <rte_version.h>
 
 #ifndef __VRDPDKCOMPAT_H__
 #define __VRDPDKCOMPAT_H__
