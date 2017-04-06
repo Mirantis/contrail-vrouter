@@ -376,7 +376,14 @@ dpdk_af_packet_if_add(struct vr_interface *vif)
                 "    error initializing af_packet device %s\n", name);
         return ret;
     }
-    port_id = rte_eth_dev_allocated(name)->data->port_id;
+
+    if (!rte_eth_dev_allocated(name)) {
+        RTE_LOG(ERR, VROUTER,
+                " error: device %s is allocated but not attached\n", name);
+        return -EINVAL;
+    }
+
+    port_id = (uint8_t)(rte_eth_dev_allocated(name) - rte_eth_devices);
 
     ethdev = &vr_dpdk.ethdevs[port_id];
     if (ethdev->ethdev_ptr != NULL) {
