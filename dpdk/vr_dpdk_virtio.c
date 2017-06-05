@@ -1701,7 +1701,7 @@ vr_dpdk_set_vhost_send_func(unsigned int vif_idx, uint32_t mrg)
 static inline void
 dpdk_virtio_send_burst(struct dpdk_virtio_writer *p)
 {
-    uint32_t nb_tx = 0;
+     __rte_unused uint32_t nb_tx = 0;
 
     if (likely(p->tx_virtioq->vdv_send_func != NULL)) {
         nb_tx = p->tx_virtioq->vdv_send_func(p, p->tx_virtioq,
