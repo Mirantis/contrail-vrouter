@@ -219,7 +219,9 @@ if sys.platform != 'darwin':
         dpdk_dst_dir = Dir(DPDK_DST_DIR).abspath
 
         make_cmd = 'make -C ' + dpdk_src_dir \
-            + ' EXTRA_CFLAGS="' + DPDK_FLAGS + '"' \
+            + ' EXTRA_CFLAGS="' + DPDK_FLAGS \
+            + ' -Wno-maybe-uninitialized' \
+            + '"' \
             + ' ARCH=x86_64' \
             + ' O=' + dpdk_dst_dir \
             + ' '
