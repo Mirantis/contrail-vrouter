@@ -1364,5 +1364,4 @@ pkt_drop_stats(struct vr_interface *vif, unsigned short reason, int cpu)
     return;
 }
 
-static void lh_handle_checksum_complete_skb(struct sk_buff *skb);
 #endif /* __VR_PACKET_H__ */
