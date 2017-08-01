@@ -12,6 +12,6 @@ vp_os_packet(struct vr_packet *pkt)
     return CONTAINER_OF(cb, struct sk_buff, pkt);
 }
 
-static void lh_handle_checksum_complete_skb(struct sk_buff *skb);
+void lh_handle_checksum_complete_skb(struct sk_buff *skb);
 
 #endif /* __VR_LINUX_H__ */
