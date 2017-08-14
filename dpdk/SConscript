@@ -30,8 +30,8 @@ env.Requires(dpdk_objs, dpdk_lib)
 # to make sure that all are built when you do 'scons' @ the top level
 env.Default(dpdk_vrouter)
 
-env.Alias('install', env.Install(env['INSTALL_BIN'], dpdk_vrouter))
-env.Alias('install',
+env.Alias('vrouter/dpdk', env.Install(env['INSTALL_BIN'], dpdk_vrouter))
+env.Alias('vrouter/dpdk',
            env.InstallAs(env['INSTALL_SYSTEMD'] + '/contrail-vrouter-dpdk.service',
            '#/vrouter/systemd/contrail-vrouter-dpdk.service'))
 vtest = Command(target = "all_tests.log",
