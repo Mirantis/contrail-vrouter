@@ -197,14 +197,17 @@ if sys.platform != 'darwin':
         dpdk_dst_dir = Dir(DPDK_DST_DIR).abspath
 
         make_cmd = 'make -C ' + dpdk_src_dir \
-            + ' EXTRA_CFLAGS="' + DPDK_FLAGS + '"' \
+            + ' EXTRA_CFLAGS="' + DPDK_FLAGS \
+            + ' -Wno-maybe-uninitialized' \
+            + '"' \
+            + ' ARCH=x86_64' \
             + ' O=' + dpdk_dst_dir \
             + ' '
 
         # If this var is set, then we need to pass it to make cmd for libdpdk
-        if kernel_build_dir:
-            print "info: Adjusting libdpdk build to use RTE_KERNELDIR=%s" % kernel_build_dir
-            make_cmd += "RTE_KERNELDIR=%s " % kernel_build_dir
+        if kernel_dir:
+            print "info: Adjusting libdpdk build to use RTE_KERNELDIR=%s" % kernel_dir
+            make_cmd += "RTE_KERNELDIR=%s " % kernel_dir
 
         dpdk_lib = env.Command('dpdk_lib', None,
             make_cmd + 'config T=' + DPDK_TARGET
