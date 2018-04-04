@@ -78,19 +78,18 @@ if sys.platform.startswith('freebsd'):
 #
 default_kernel_ver = shellCommand("uname -r").strip()
 kernel_build_dir = None
+kernel_dir = None
 (PLATFORM, VERSION, EXTRA) = platform.linux_distribution()
 if (PLATFORM.lower() == 'ubuntu' and VERSION.find('14.') == 0):
     if re.search('^4\.', default_kernel_ver):
         print "Warn: kernel version %s not supported for vrouter and dpdk" % default_kernel_ver
-        kernel_build_dir = '/lib/modules/3.13.0-142-generic/build'
-        if os.path.isdir(kernel_build_dir):
-            default_kernel_ver = "3.13.0-142-generic"
-            print "info: libdpdk will be built against kernel version %s" % default_kernel_ver
+        kernel_build_dir = shellCommand("find '/lib/modules/' -name build | grep '/lib/modules/3' | head -1")
+        if kernel_build_dir:
+            kernel_dir = kernel_build_dir
         else:
-            print "*** Error: Cannot find kernel v3.13.0-142, build of vrouter will likely fail"
             kernel_build_dir = '/lib/modules/%s/build' % default_kernel_ver
 
-kernel_dir = GetOption('kernel-dir')
+kernel_dir = GetOption('kernel-dir') if not kernel_dir else kernel_dir
 if kernel_dir:
     kern_version = shellCommand('cat %s/include/config/kernel.release' % kernel_dir)
 else:
@@ -200,7 +199,9 @@ if sys.platform != 'darwin':
         dpdk_dst_dir = Dir(DPDK_DST_DIR).abspath
 
         make_cmd = 'make -C ' + dpdk_src_dir \
-            + ' EXTRA_CFLAGS="' + DPDK_FLAGS + '"' \
+            + ' EXTRA_CFLAGS="' + DPDK_FLAGS \
+            + ' -Wno-maybe-uninitialized' \
+            + '"' \
             + ' ARCH=x86_64' \
             + ' O=' + dpdk_dst_dir \
             + ' '
