@@ -2299,6 +2299,7 @@ vr_napi_poll(struct napi_struct *napi, int budget)
         gro_vif_stats = vif_get_stats(gro_vif, vr_get_cpu());
 
     while ((skb = skb_dequeue(head))) {
+        lh_handle_checksum_complete_skb(skb);
         vr_skb_set_rxhash(skb, 0);
 
         ret = napi_gro_receive(napi, skb);
