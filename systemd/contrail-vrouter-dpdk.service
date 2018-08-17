@@ -2,10 +2,13 @@
 Description=Contrail vrouter dpdk service
 After=network.target
 Wants=contrail-vrouter-agent.service contrail-vrouter-nodemgr.service
+Before=contrail-vrouter-agent.service
 
 [Service]
 Type=simple
 ExecStart=/usr/bin/contrail-vrouter-dpdk --no-daemon
+ExecStartPre=/usr/lib/contrail/bin/dpdk_vnagent_ExecStartPre.sh
+ExecStopPost=/usr/lib/contrail/bin/dpdk_vnagent_ExecStopPost.sh
 TimeoutStartSec=240
 TimeoutStopSec=0
 Restart=always
