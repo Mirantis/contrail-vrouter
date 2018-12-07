@@ -1047,7 +1047,7 @@ lh_csum_verify(struct sk_buff *skb, struct vr_ip *iph)
  * lh_handle_checksum_complete_skb - if the skb has CHECKSUM_COMPLETE set,
  * set it to CHECKSUM_NONE. 
  */
-static void
+void
 lh_handle_checksum_complete_skb(struct sk_buff *skb)
 {
     if (skb->ip_summed == CHECKSUM_COMPLETE) {
