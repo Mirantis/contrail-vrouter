@@ -247,7 +247,9 @@ linux_inet_fragment(struct vr_interface *vif, struct sk_buff *skb,
     netdev_features_t features;
 
     features = netif_skb_features(skb);
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,0))
+    features &= (~(NETIF_F_ALL_TSO | NETIF_F_GSO));
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
     features &= (~(NETIF_F_ALL_TSO | NETIF_F_UFO | NETIF_F_GSO));
 #else
     features &= ~(NETIF_F_TSO | NETIF_F_UFO | NETIF_F_GSO);
@@ -493,7 +495,9 @@ linux_gso_xmit(struct vr_interface *vif, struct sk_buff *skb,
     struct net_device *ndev = (struct net_device *)vif->vif_os;
 
     features = netif_skb_features(skb);
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,0))
+    features &= (~(NETIF_F_ALL_TSO | NETIF_F_GSO));
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
     features &= (~(NETIF_F_ALL_TSO | NETIF_F_UFO | NETIF_F_GSO));
 #else
     features &= (~(NETIF_F_TSO | NETIF_F_UFO | NETIF_F_GSO));
@@ -1565,15 +1569,15 @@ linux_if_get_settings(struct vr_interface *vif,
     rtnl_lock();
 
     if (netif_running(dev)) {
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0))
+#if ((LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0)) || (defined(RHEL_MAJOR) && \
+        defined(RHEL_MINOR) && (RHEL_MAJOR == 7) && (RHEL_MINOR >= 5)))
         /* ethtool_link_ksettings introduced since kernel 4.6. ethtool_cmd has been removed */
         struct ethtool_link_ksettings ekmd;
         ekmd.base.cmd = ETHTOOL_GSET;
         if  (!(ret = __ethtool_get_link_ksettings(dev, &ekmd))) {
             settings->vis_speed = ekmd.base.speed;
             settings->vis_duplex = ekmd.base.duplex;
-#endif
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0) && LINUX_VERSION_CODE < KERNEL_VERSION(4,6,0))
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0) && LINUX_VERSION_CODE < KERNEL_VERSION(4,6,0))
         struct ethtool_cmd cmd;
         /* As per lxr, this API was introduced in 3.2.0 */
         if (!(ret = __ethtool_get_settings(dev, &cmd))) {
