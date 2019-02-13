@@ -154,6 +154,7 @@ if sys.platform.startswith('freebsd'):
 # This approach always uses --kernel-dir, which works for vrouter, but
 # libdpdk still defaults to installed version and thus will fail.
 #
+
 if not sys.platform.startswith('win'):
     default_kernel_ver = shellCommand("uname -r").strip()
     kernel_build_dir = None
@@ -321,7 +322,9 @@ if sys.platform != 'darwin':
         dpdk_dst_dir = Dir(DPDK_DST_DIR).abspath
 
         make_cmd = 'make -C ' + dpdk_src_dir \
-            + ' EXTRA_CFLAGS="' + DPDK_FLAGS + '"' \
+            + ' EXTRA_CFLAGS="' + DPDK_FLAGS \
+            + ' -Wno-maybe-uninitialized' \
+            + '"' \
             + ' ARCH=x86_64' \
             + ' O=' + dpdk_dst_dir \
             + ' '
