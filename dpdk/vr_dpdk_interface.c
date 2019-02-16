@@ -321,6 +321,12 @@ dpdk_find_port_id_by_drv_name(void)
         if (rte_eth_devices[i].data == NULL)
             continue;
 
+        if (!rte_eth_dev_is_valid_port(i))
+            continue;
+
+        if (rte_eth_devices[i].data->drv_name == NULL)
+            continue;
+
         if (strcmp(rte_eth_devices[i].data->drv_name, "net_bonding") == 0)
             return i;
     }
