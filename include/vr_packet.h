@@ -1168,5 +1168,4 @@ pkt_init_fragment(struct vr_packet *dst, struct vr_packet *src)
 
     return;
 }
-
 #endif /* __VR_PACKET_H__ */
