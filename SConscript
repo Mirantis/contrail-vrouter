@@ -172,6 +172,7 @@ def createVRouterMSINode():
 # This approach always uses --kernel-dir, which works for vrouter, but
 # libdpdk still defaults to installed version and thus will fail.
 #
+
 if not sys.platform.startswith('win'):
     default_kernel_ver = shellCommand("uname -r").strip()
     kernel_build_dir = None
