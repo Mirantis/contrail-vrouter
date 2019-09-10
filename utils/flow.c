@@ -1676,7 +1676,7 @@ flow_rate(void)
         diff_ms += (now.tv_usec - last_time.tv_usec) / 1000;
         assert(diff_ms > 0 );
 
-        hold_count = ft->ft_hold_entries;
+        hold_count = ft->ft_hold_entries - hold_count_old;
         hold_rate = hold_count * 1000 / diff_ms;
 
         processed_count = ft->ft_processed - processed_count_old;
@@ -1696,8 +1696,8 @@ flow_rate(void)
 
         if (hold_rate || processed_rate || added_rate || deleted_rate) {
             printf ("%s.%03d:  Entries = %8d "
-                    "Rate = %6d (Fwd = %8d Rev = %8d Del = %8d) "
-                    "Hold = %8d Free Burst Tokens = %8d Total Hold Entries %8d\n",
+                    "Rate = %6d (Fwd = %8d Rev = %8d Del = %8d "
+                    "Hold = %8d) Free Burst Tokens = %8d Total Hold Entries %8d\n",
                     fmt, (int)now.tv_usec/1000,
                     (int)ft->ft_total_entries, flow_op_rate, processed_count,
                     added_count, deleted_count, hold_count,
@@ -1707,7 +1707,7 @@ flow_rate(void)
         }
 
         last_time = now;
-        hold_count_old = hold_count;
+        hold_count_old = ft->ft_hold_entries;
         processed_count_old = ft->ft_processed;
         added_count_old = ft->ft_added;
         deleted_count_old = ft->ft_deleted;
