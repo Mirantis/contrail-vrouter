@@ -1541,6 +1541,7 @@ flow_stats(void)
         flow_action_fwd = 0;
         flow_action_nat = 0;
         usleep(500000);
+        flow_table_get();
         for (i = 0; i < ft->ft_num_entries; i++) {
             fe = (struct vr_flow_entry *)((char *)ft->ft_entries +
                                           (i * sizeof(*fe)));
