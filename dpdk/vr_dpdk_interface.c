@@ -1162,7 +1162,7 @@ dpdk_ipv4_sw_iphdr_checksum_at_offset(struct vr_packet *pkt, unsigned offset)
  * @return
  *   The complemented checksum to set in the IP packet.
  */
-inline uint16_t
+static inline uint16_t
 dpdk_ipv4_udptcp_cksum(struct rte_mbuf *m,
                        const struct ipv4_hdr *ipv4_hdr,
                        uint8_t *l4_hdr)
