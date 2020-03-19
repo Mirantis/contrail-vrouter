@@ -1205,7 +1205,7 @@ dpdk_ipv6_udptcp_cksum(struct rte_mbuf *m, const struct ipv6_hdr *ipv6_hdr,
  * @return
  *   The complemented checksum to set in the IP packet.
  */
-inline uint16_t
+static inline uint16_t
 dpdk_ipv4_udptcp_cksum(struct rte_mbuf *m,
                        const struct ipv4_hdr *ipv4_hdr,
                        uint8_t *l4_hdr)
